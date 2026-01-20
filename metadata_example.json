@@ -1,0 +1,10 @@
+{
+    "name": "PassCours Bronze",
+    "description": "Token d'accès de niveau Bronze pour l'application PassCours.",
+    "image": "https://example.com/images/bronze.png",
+    "properties": {
+        "level": 1,
+        "rarity": "Common",
+        "transferable": true
+    }
+}

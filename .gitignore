@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Hardhat
+artifacts/
+cache/
+typechain/
+typechain-types/
+coverage/
+coverage.json
+
+# Environment
+.env
+
+# Misc
+.DS_Store
+Thumbs.db

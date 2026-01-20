@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PassCours DApp</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2,
+        h3 {
+            color: var(--text-color);
+            margin-top: 0;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:disabled {
+            background-color: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        input,
+        select {
+            padding: 12px;
+            background-color: #334155;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid var(--primary-color);
+            border-color: transparent;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .balances {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .balance-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            flex: 1;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .balance-item h3 {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 10px;
+        }
+
+        .balance-item p {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 100;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 15px 25px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+        }
+
+        #walletAddress {
+            font-family: 'Courier New', monospace;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Badge colors */
+        .badge-bronze {
+            color: #cd7f32;
+        }
+
+        .badge-silver {
+            color: #c0c0c0;
+        }
+
+        .badge-gold {
+            color: #ffd700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>PassCours DApp</h1>
+            <p style="color: var(--text-muted);">Gérez vos accès et évoluez vers l'excellence.</p>
+        </header>
+
+        <!-- Login View -->
+        <div id="loginView" class="card" style="text-align: center; max-width: 400px; margin: 0 auto;">
+            <h2>Bienvenue</h2>
+            <p style="margin-bottom: 24px; color: var(--text-muted);">Connectez votre portefeuille pour accéder à vos
+                Pass.</p>
+            <button id="connectBtn" class="btn">Connecter Wallet (Metamask)</button>
+        </div>
+
+        <!-- Main App View -->
+        <div id="mainApp" class="hidden">
+            <div class="top-bar">
+                <div>
+                    <span style="color: var(--text-muted); margin-right: 10px;">Connecté en tant que:</span>
+                    <span id="walletAddress">0x...</span>
+                </div>
+                <div style="display: flex; gap: 10px;">
+
+                    <button id="disconnectBtn" class="btn btn-outline btn-small"
+                        style="border-color: var(--error); color: var(--error);">Déconnexion</button>
+                </div>
+            </div>
+
+            <!-- Token Info Section -->
+            <div class="card" style="background: linear-gradient(145deg, #1e293b, #1e1b4b); border: 1px solid #4338ca;">
+                <h3 style="display: flex; align-items: center; gap: 10px;">ℹ️ Utilité des Pass</h3>
+                <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                        <h4 class="badge-bronze" style="margin-top: 0;">🥉 Bronze</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Accès débutant. Permet de consulter les
+                            cours de base et d'accéder à la salle d'entraînement commune.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                        <h4 class="badge-silver" style="margin-top: 0;">🥈 Silver</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Accès avancé. Débloque les tutoriels
+                            vidéo et l'accès aux équipements spécialisés.</p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px;">
+                        <h4 class="badge-gold" style="margin-top: 0;">🥇 Gold</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Accès Expert. Coaching privé illimité
+                            et accès 24/7. <b>Intransférable (Soulbound).</b></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="balances">
+                <div class="balance-item">
+                    <h3 class="badge-bronze">Bronze</h3>
+                    <p id="bronzeBalance" class="badge-bronze">0</p>
+                </div>
+                <div class="balance-item">
+                    <h3 class="badge-silver">Silver</h3>
+                    <p id="silverBalance" class="badge-silver">0</p>
+                </div>
+                <div class="balance-item">
+                    <h3 class="badge-gold">Gold</h3>
+                    <p id="goldBalance" class="badge-gold">0</p>
+                </div>
+            </div>
+
+            <!-- Inventaire (Metadata) -->
+            <h2 style="margin-top: 40px; margin-bottom: 20px;">🎒 Mon Inventaire</h2>
+            <div id="inventoryGrid" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <p style="text-align: center; width: 100%; color: var(--text-muted);">Connectez-vous pour voir vos
+                    objets...</p>
+            </div>
+
+            <!-- Espace Formation (Token Gating) -->
+            <h2 style="margin-top: 40px; margin-bottom: 20px;">🎓 Espace Formation</h2>
+            <div class="grid" style="margin-bottom: 40px;">
+                <!-- Bronze Content -->
+                <div class="card" style="border-top: 4px solid #cd7f32;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <h3 class="badge-bronze">Cours de Base</h3>
+                        <span
+                            style="background: rgba(205, 127, 50, 0.2); color: #cd7f32; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">Requis:
+                            Bronze</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Accédez aux fondamentaux, documents PDF et
+                        quiz d'introduction.</p>
+                    <button id="accessBronzeBtn" class="btn btn-outline"
+                        style="margin-top: auto; border-color: #cd7f32; color: #cd7f32;">Obtenir le cours</button>
+                </div>
+
+                <!-- Silver Content -->
+                <div class="card" style="border-top: 4px solid #c0c0c0;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <h3 class="badge-silver">Tutoriels & Équipements</h3>
+                        <span
+                            style="background: rgba(192, 192, 192, 0.2); color: #c0c0c0; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">Requis:
+                            Silver</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Vidéos HD, accès salle équipements et
+                        exercices avancés.</p>
+                    <button id="accessSilverBtn" class="btn btn-outline"
+                        style="margin-top: auto; border-color: #c0c0c0; color: #c0c0c0;">Obtenir les tutoriels</button>
+                </div>
+
+                <!-- Gold Content -->
+                <div class="card" style="border-top: 4px solid #ffd700;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <h3 class="badge-gold">Coaching Privé</h3>
+                        <span
+                            style="background: rgba(255, 215, 0, 0.2); color: #ffd700; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem;">Requis:
+                            Gold</span>
+                    </div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Session Zoom avec un mentor, plan
+                        personnalisé et support 24/7.</p>
+                    <button id="accessGoldBtn" class="btn btn-outline"
+                        style="margin-top: auto; border-color: #ffd700; color: #ffd700;">Obtenir le coaching</button>
+                </div>
+            </div>
+
+            <div class="grid">
+                <!-- Actions -->
+                <div class="card">
+                    <h3>🚀 Amélioration (Upgrade)</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Combinez vos tokens inférieur pour monter en
+                        grade.</p>
+                    <div style="display: flex; gap: 10px; flex-direction: column;">
+                        <button id="upgradeBronzeBtn" class="btn">
+                            Upgrade 2 Bronze ➔ 1 Silver
+                        </button>
+                        <button id="upgradeSilverBtn" class="btn">
+                            Upgrade 2 Silver ➔ 1 Gold
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💸 Transfert</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Envoyez des tokens (sauf Gold) à un ami.</p>
+                    <select id="transferLevel">
+                        <option value="1">Bronze</option>
+                        <option value="2">Silver</option>
+                    </select>
+                    <input type="text" id="transferTo" placeholder="Adresse destinataire (0x...)">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="transferAmount" placeholder="Qté" value="1" style="margin-bottom: 0;">
+                        <button id="transferBtn" class="btn">Envoyer</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🛠️ Admin Zone</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Réservé au propriétaire du contrat.</p>
+                    <select id="mintLevel">
+                        <option value="1">Bronze</option>
+                        <option value="2">Silver</option>
+                        <option value="3">Gold</option>
+                    </select>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="number" id="mintAmount" placeholder="Qté" value="1" style="margin-bottom: 0;">
+                        <button id="mintBtn" class="btn btn-outline"
+                            style="border-color: var(--text-border); color: var(--text-color);">Mint</button>
+                    </div>
+
+                    <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 15px;">
+                        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Configuration IPFS
+                        </p>
+                        <input type="text" id="ipfsUriInput" placeholder="ipfs://CID/"
+                            style="margin-bottom: 10px; width: 100%;">
+                        <button id="setUriBtn" class="btn btn-outline" style="width: 100%;">Définir URI</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="statusMessage" class="status-bar"></div>
+
+    <!-- Import Ethers.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
+    <script src="app.js?v=12"></script>
+</body>
+
+</html>

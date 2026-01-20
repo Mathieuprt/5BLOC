@@ -1,0 +1,23 @@
+{
+    "name": "Pass Bronze - Cours Fondamentaux",
+    "description": "Accès aux cours d'introduction sur la Blockchain.",
+    "image": "ipfs://bafybeifuei4vytozljxxsgm6nxvf7zpq7yevtafurpa4nxa3l6ultervfu/bronze.png",
+    "type": "Educational Access Token",
+    "value": "Niveau 1",
+    "hash": "ipfs://bafybeibbijd5h5kyyow4h6ov7rqespyce3l7ze7z4kg2t4r3ezesldmmo4/cours_bronze.md",
+    "previousOwners": [
+        "Note: Tracking dynamique on-chain via Events"
+    ],
+    "createdAt": "2026-01-20T12:00:00Z",
+    "lastTransferAt": "2026-01-20T12:00:00Z",
+    "attributes": [
+        {
+            "trait_type": "Level",
+            "value": "Bronze"
+        },
+        {
+            "trait_type": "Access",
+            "value": "Basic"
+        }
+    ]
+}
