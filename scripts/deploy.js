@@ -3,6 +3,7 @@ const hre = require("hardhat");
 const fs = require("fs");
 
 async function main() {
+    // Déploiement du contrat PassCours
     const passCours = await hre.ethers.deployContract("PassCours");
 
     await passCours.waitForDeployment();
@@ -11,9 +12,10 @@ async function main() {
         `PassCours deployed to ${passCours.target}`
     );
 
+    // On sauvegarde l'adresse pour les scripts de test/dev
     fs.writeFileSync("address.txt", passCours.target);
 
-    // Update app.js automatically
+    // Mettre à jour automatiquement app.js
     const appJsPath = "app.js";
     if (fs.existsSync(appJsPath)) {
         let appJsContent = fs.readFileSync(appJsPath, "utf8");
@@ -26,7 +28,6 @@ async function main() {
     }
 
 }
-
 
 main().catch((error) => {
     console.error(error);

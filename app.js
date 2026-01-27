@@ -10,15 +10,11 @@ const CONTRACT_ABI = [
     "function uri(uint256 id) view returns (string)"
 ];
 
-// ... (code omitted)
-
 async function checkAccess(id, contentName) {
     if (!contract) return;
     try {
-        // On lance directement la transaction, Metamask servira de confirmation
         showStatus("Veuillez valider la transaction dans Metamask...", "var(--warning)");
 
-        // Appel de la fonction burnPass du contrat
         const tx = await contract.burnPass(id, 1);
 
         showStatus("Transaction envoyée, attente de validation...", "var(--warning)");
@@ -27,9 +23,8 @@ async function checkAccess(id, contentName) {
         showSuccess("Token consommé avec succès !");
         updateBalances();
 
-        // Petit délai pour laisser l'animation se faire
         setTimeout(() => {
-            alert(`✅ Obtenu !\n\nVous avez débloqué : ${contentName}.\n(Votre token a été consommé)`);
+            alert(`Obtenu !\n\nVous avez débloqué : ${contentName}.\n(Votre token a été consommé)`);
         }, 500);
 
     } catch (error) {
@@ -49,8 +44,6 @@ const mainApp = document.getElementById('mainApp');
 const loginView = document.getElementById('loginView');
 const statusMessage = document.getElementById('statusMessage');
 
-// --- Gestion Connexion / Déconnexion ---
-
 if (connectBtn) {
     connectBtn.addEventListener('click', async () => {
         if (window.ethereum) {
@@ -62,11 +55,9 @@ if (connectBtn) {
 
                 initializeUI(userAddress);
 
-                // Initialiser le contrat
                 contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 updateBalances();
 
-                // Écouter les changements de compte Metamask
                 window.ethereum.on('accountsChanged', handleAccountsChanged);
 
             } catch (error) {
@@ -92,12 +83,12 @@ if (disconnectBtn) {
 
 function handleAccountsChanged(accounts) {
     if (accounts.length === 0) {
-        // Metamask locked or disconnected
+        // Déconnexion forcée si plus de comptes connectés
         if (disconnectBtn) disconnectBtn.click();
     } else if (accounts[0] !== userAddress) {
         userAddress = accounts[0];
         initializeUI(userAddress);
-        // Re-init contract signer
+        // On ré-initialise le signer du contrat
         provider.getSigner().then(s => {
             signer = s;
             contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
@@ -111,7 +102,6 @@ function initializeUI(address) {
     if (loginView) loginView.style.display = 'none';
     if (mainApp) {
         mainApp.classList.remove('hidden');
-        // Animation d'entrée
         mainApp.style.opacity = '0';
         mainApp.style.display = 'block';
         setTimeout(() => {
@@ -132,9 +122,7 @@ function resetUI() {
     if (document.getElementById('goldBalance')) document.getElementById('goldBalance').innerText = '0';
 }
 
-// --- Fonctions Métier ---
-
-// Helper pour convertir IPFS -> HTTP
+// Conversion IPFS -> Gateway Pinata
 function resolveIPFS(url) {
     if (!url) return "";
     if (url.startsWith("ipfs://")) {
@@ -154,7 +142,7 @@ async function updateBalances() {
         animateValue("silverBalance", silver.toString());
         animateValue("goldBalance", gold.toString());
 
-        // Une fois les balances à jour, on charge l'inventaire visuel
+        // Update de la vue
         loadInventory([bronze, silver, gold]);
 
     } catch (error) {
@@ -164,24 +152,19 @@ async function updateBalances() {
 
 async function loadInventory(balances) {
     const grid = document.getElementById("inventoryGrid");
-    grid.innerHTML = ""; // Clear
+    grid.innerHTML = "";
 
     let hasItems = false;
     const ids = [1, 2, 3];
 
     for (let i = 0; i < ids.length; i++) {
         const id = ids[i];
-        const balance = balances[i]; // BigInt
+        const balance = balances[i];
 
         if (balance > 0n) {
             hasItems = true;
             try {
-                // 1. Récupérer l'URI du token depuis le contrat
-                // Note: Si IPFS n'est pas encore configuré, cela peut renvoyer une URL vide ou cassée
                 const uri = await contract.uri(id);
-
-                // 2. Fetch les métadonnées JSON
-                // Fallback si URI vide pour démo
                 let metadata = { name: `Token #${id}`, description: "Pas de métadonnées", image: "" };
 
                 if (uri && uri.startsWith("ipfs://")) {
@@ -196,7 +179,7 @@ async function loadInventory(balances) {
                     }
                 }
 
-                // 3. Afficher la carte
+                // Affichage carte
                 const card = document.createElement("div");
                 card.className = "card";
                 card.style.borderColor = id === 1 ? "#cd7f32" : (id === 2 ? "#c0c0c0" : "#ffd700");
@@ -226,7 +209,7 @@ async function loadInventory(balances) {
     }
 }
 
-// Mint (Admin only)
+// Mint (Réservé à l'Admin)
 const mintBtn = document.getElementById('mintBtn');
 if (mintBtn) {
     mintBtn.addEventListener('click', async () => {
@@ -286,7 +269,7 @@ async function doUpgrade(id, label) {
     }
 }
 
-// Transfer
+// Transfert
 const transferBtn = document.getElementById('transferBtn');
 if (transferBtn) {
     transferBtn.addEventListener('click', async () => {
@@ -312,7 +295,7 @@ if (transferBtn) {
     });
 }
 
-// Access Control (Token Gating)
+// Contrôle d'accès (Token Gating)
 const accessBronzeBtn = document.getElementById('accessBronzeBtn');
 if (accessBronzeBtn) accessBronzeBtn.addEventListener('click', () => checkAccess(1, "Cours de Base"));
 
@@ -325,10 +308,8 @@ if (accessGoldBtn) accessGoldBtn.addEventListener('click', () => checkAccess(3, 
 async function checkAccess(id, contentName) {
     if (!contract) return;
     try {
-        // On lance directement la transaction, Metamask servira de confirmation
         showStatus("Veuillez valider la transaction dans Metamask...", "var(--warning)");
 
-        // Appel de la fonction burnPass du contrat
         const tx = await contract.burnPass(id, 1);
 
         showStatus("Transaction envoyée, attente de validation...", "var(--warning)");
@@ -337,17 +318,14 @@ async function checkAccess(id, contentName) {
         showSuccess("Token consommé avec succès !");
         updateBalances();
 
-        // Petit délai pour laisser l'animation le temps de se faire
         setTimeout(() => {
-            alert(`✅ Obtenu !\n\nVous avez débloqué : ${contentName}.\n(Votre token a été consommé)`);
+            alert(`Obtenu !\n\nVous avez débloqué : ${contentName}.\n(Votre token a été consommé)`);
         }, 500);
 
     } catch (error) {
         handleError(error);
     }
 }
-
-// --- UI Helpers ---
 
 function handleError(error) {
     console.error(error);
@@ -387,13 +365,12 @@ function showError(msg) {
 function animateValue(id, value) {
     const el = document.getElementById(id);
     if (el) {
-        // Simple flash effect
         el.style.transform = "scale(1.2)";
         el.style.color = "white";
         setTimeout(() => {
             el.innerText = value;
             el.style.transform = "scale(1)";
-            el.style.color = ""; // reset to class color
+            el.style.color = "";
         }, 200);
     }
 }

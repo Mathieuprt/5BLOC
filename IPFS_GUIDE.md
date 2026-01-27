@@ -41,4 +41,4 @@ Voici la marche à suivre étape par étape :
     *(N'oubliez pas le `/` à la fin !)*
 4.  Cliquez sur "Définir URI" et validez la transaction.
 
-✅ **Terminé !** Vos tokens pointent maintenant vers vos fichiers sur IPFS.
+**Terminé !** Vos tokens pointent maintenant vers vos fichiers sur IPFS.

@@ -11,9 +11,9 @@ Application Décentralisée (DApp) pour la gestion d'accès via des tokens ERC-1
     - Délai de 5 minutes entre transactions.
     - Verrouillage de 10 minutes après réception d'un token.
 
-## 🧠 Fonctionnement Technique
+## Fonctionnement Technique
 
-### 🔗 Blockchain & IPFS : Qui fait quoi ?
+### Blockchain & IPFS : Qui fait quoi ?
 
 Ce projet utilise une architecture **hybride** standard dans le Web3 :
 
@@ -27,7 +27,7 @@ Ce projet utilise une architecture **hybride** standard dans le Web3 :
     *   **Ce qu'il stocke** : Les images, les fichiers JSON (Métadonnées) et le contenu des cours.
     *   **Lien** : Le Smart Contract contient une fonction `uri(id)` qui renvoie le lien IPFS vers les détails du token.
 
-### 🔄 Cycle de Vie d'un Jeton
+### Cycle de Vie d'un Jeton
 
 1.  **Création (Mint)** :
     *   L'Admin appelle `adminMint` sur la Blockchain.

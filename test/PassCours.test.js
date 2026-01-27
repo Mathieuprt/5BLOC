@@ -27,6 +27,7 @@ describe("PassCours", function () {
     describe("Admin Minting", function () {
         it("Should allow owner to mint tokens", async function () {
             const { passCours, owner, otherAccount } = await loadFixture(deployPassCoursFixture);
+            // On mint 2 tokens Bronze pour un autre compte
             await passCours.adminMint(otherAccount.address, 1, 2);
             expect(await passCours.balanceOf(otherAccount.address, 1)).to.equal(2);
         });
@@ -42,6 +43,7 @@ describe("PassCours", function () {
             const { passCours, owner } = await loadFixture(deployPassCoursFixture);
             await passCours.adminMint(owner.address, 1, 2);
 
+            // Les tokens sont lockés 1 min après réception
             await time.increase(601);
 
             await passCours.upgradeTokens(1);
@@ -62,8 +64,10 @@ describe("PassCours", function () {
             await passCours.adminMint(owner.address, 1, 4);
             await time.increase(65);
 
+            // Premier upgrade OK
             await passCours.upgradeTokens(1);
 
+            // On vérifie le cooldown contre le spam (1 min)
             await expect(passCours.upgradeTokens(1)).to.be.revertedWith("Veuillez attendre 1 minute entre les transactions");
 
             await time.increase(65);
@@ -77,6 +81,7 @@ describe("PassCours", function () {
             const { passCours, owner, otherAccount } = await loadFixture(deployPassCoursFixture);
             await passCours.adminMint(owner.address, 1, 1);
 
+            // Attente de la fin du verrouillage après réception
             await time.increase(65);
 
             await passCours.safeTransferFrom(owner.address, otherAccount.address, 1, 1, "0x");
@@ -95,6 +100,7 @@ describe("PassCours", function () {
             await passCours.adminMint(owner.address, 3, 1);
             await time.increase(65);
 
+            // Le Gold ne doit jamais bouger (Soulbound)
             await expect(passCours.safeTransferFrom(owner.address, otherAccount.address, 3, 1, "0x")).to.be.revertedWith("Le token Gold est non-transferable (Soulbound)");
         });
 
@@ -113,6 +119,7 @@ describe("PassCours", function () {
             const { passCours, owner } = await loadFixture(deployPassCoursFixture);
             await passCours.adminMint(owner.address, 1, 2);
 
+            // Consommer un pass = burn du token
             await passCours.burnPass(1, 1);
 
             expect(await passCours.balanceOf(owner.address, 1)).to.equal(1);
