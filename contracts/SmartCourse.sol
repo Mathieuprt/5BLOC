@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
 
-// Gestion des accès via tokens ERC-1155
-contract PassCours is ERC1155, Ownable, ReentrancyGuard, ERC1155Supply {
+// Gestion des accès via tokens ERC-1155 (Bronze=1, Silver=2, Gold=3)
+contract SmartCourse is ERC1155, Ownable, ReentrancyGuard, ERC1155Supply {
 
     uint256 public constant BRONZE = 1;
     uint256 public constant SILVER = 2;

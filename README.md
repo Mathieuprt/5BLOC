@@ -1,4 +1,4 @@
-# PassCours DApp
+# SmartCourse DApp
 
 Application Décentralisée (DApp) pour la gestion d'accès via des tokens ERC-1155 évolutifs.
 
@@ -9,7 +9,7 @@ Application Décentralisée (DApp) pour la gestion d'accès via des tokens ERC-1
 - **Sécurité** :
     - Limite de 8 tokens par portefeuille.
     - Délai de 5 minutes entre transactions.
-    - Verrouillage de 10 minutes après réception d'un token.
+    - Verrouillage de 1 minutes après réception d'un token.
 
 ## Fonctionnement Technique
 

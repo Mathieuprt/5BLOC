@@ -1,4 +1,4 @@
-# Documentation Technique - PassCours
+# Documentation Technique - SmartCourse
 
 ## Structure du Projet
 
@@ -7,23 +7,23 @@
 - `assets/` : Images des tokens (PNG), utilisées pour les métadonnées.
 - `content/` : Contenu éducatif (Markdown files), lié aux tokens pour l'accès exclusif.
 - `contracts/` : Contient le code source Solidity.
-    - `PassCours.sol` : Le contrat principal ERC-1155.
+    - `SmartCourse.sol` : Le contrat principal ERC-1155.
 - `metadata/` : Fichiers JSON (Standard ERC-1155) contenant les métadonnées des tokens.
 - `scripts/` : Scripts d'automatisation.
     - `deploy.js` : Script de déploiement sécurisé sur la blockchain.
 - `test/` : Tests unitaires.
-    - `PassCours.test.js` : Tests complets des fonctionnalités et contraintes.
+    - `SmartCourse.test.js` : Tests complets des fonctionnalités et contraintes.
 - `index.html` : Interface utilisateur (Dashboard, Inventaire, Admin).
 - `app.js` : Logique frontend (Ethers.js v6) et interactions Blockchain/IPFS.
 - `hardhat.config.js` : Configuration de l'environnement de développement.
 - `address.txt` : Fichier généré contenant l'adresse du dernier déploiement.
 - `IPFS_GUIDE.md` : Guide étape par étape pour l'hébergement des assets sur IPFS.
 
-## Détails du Smart Contract (PassCours.sol)
+## Détails du Smart Contract (SmartCourse.sol)
 
 ### Variables d'État
-- `lastTransactionTimestamp` : Enregistre le timestamp de la dernière action initiée par l'utilisateur (Upgrade, Transfert sortant). Utilisé pour le Cooldown de 5 minutes.
-- `lastReceiveTimestamp` : Enregistre quand un utilisateur a reçu un certain type de token. Utilisé pour le Lock de 10 minutes.
+- `lastTransactionTimestamp` : Enregistre le timestamp de la dernière action initiée par l'utilisateur (Upgrade, Transfert sortant). Utilisé pour le Cooldown de 1 minutes.
+- `lastReceiveTimestamp` : Enregistre quand un utilisateur a reçu un certain type de token. Utilisé pour le Lock de 1 minutes.
 
 ### Fonctions Clés
 - `adminMint(account, id, amount)` :
@@ -38,7 +38,7 @@
     - **Surchage** : Ajout de vérifications avant l'appel à `super`.
     - **Contraintes** :
         - Pas de transfert de Gold (ID 3).
-        - Lock respecté (10 min après réception).
+        - Lock respecté (1 min après réception).
         - Limite de possession du destinataire (Max 8).
         - Cooldown respecté si c'est l'expéditeur qui initie.
 
@@ -102,7 +102,7 @@ Une fois sur la page web :
 1.  Cliquez sur **"Connecter Wallet"**. Votre adresse et vos soldes de tokens s'affichent.
 2.  **Mint (Simulation Admin)** : En tant que propriétaire du contrat (Account #0 par défaut), vous pouvez vous donner des tokens. Sélectionnez "Bronze" et cliquez sur "Mint Tokens".
 3.  **Upgrade** : Une fois que vous avez 2 tokens Bronze, cliquez sur "Upgrade 2 Bronze -> 1 Silver".
-    - *Attention :* Après avoir reçu des tokens (via Mint ou Transfert), ils sont verrouillés pendant 10 minutes. Vous devrez attendre ce délai pour les utiliser dans un upgrade !
+    - *Attention :* Après avoir reçu des tokens (via Mint ou Transfert), ils sont verrouillés pendant 1 minutes. Vous devrez attendre ce délai pour les utiliser dans un upgrade !
 4.  **Transfert** : Vous pouvez envoyer des tokens Bronze ou Silver à une autre adresse.
     - Le Gold est "Soulbound" et ne peut pas être transféré.
     - La limite de 8 tokens par portefeuille est vérifiée à chaque réception.

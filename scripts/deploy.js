@@ -3,17 +3,16 @@ const hre = require("hardhat");
 const fs = require("fs");
 
 async function main() {
-    // Déploiement du contrat PassCours
-    const passCours = await hre.ethers.deployContract("PassCours");
+    const smartCourse = await hre.ethers.deployContract("SmartCourse");
 
-    await passCours.waitForDeployment();
+    await smartCourse.waitForDeployment();
 
     console.log(
-        `PassCours deployed to ${passCours.target}`
+        `SmartCourse deployed to ${smartCourse.target}`
     );
 
     // On sauvegarde l'adresse pour les scripts de test/dev
-    fs.writeFileSync("address.txt", passCours.target);
+    fs.writeFileSync("address.txt", smartCourse.target);
 
     // Mettre à jour automatiquement app.js
     const appJsPath = "app.js";
@@ -21,7 +20,7 @@ async function main() {
         let appJsContent = fs.readFileSync(appJsPath, "utf8");
         appJsContent = appJsContent.replace(
             /const CONTRACT_ADDRESS = "0x[a-fA-F0-9]{40}";/,
-            `const CONTRACT_ADDRESS = "${passCours.target}";`
+            `const CONTRACT_ADDRESS = "${smartCourse.target}";`
         );
         fs.writeFileSync(appJsPath, appJsContent);
         console.log(`Updated CONTRACT_ADDRESS in ${appJsPath}`);
