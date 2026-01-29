@@ -4,9 +4,9 @@
 
 Votre progression est matérialisée par des badges numériques (NFT) de trois niveaux différents. Chaque niveau offre des droits d'accès spécifiques :
 
-*   **Pass Silver** (Niveau 2) : Accès aux tutoriels vidéo HD et équipements spécialisés.
-*   **Pass Gold** (Niveau 3) : Accès au coaching privé et mentorat premium. 
-*   **Pass Bronze** (Niveau 1) : Accès aux cours fondamentaux et quiz de base.
+*   **Pass Silver** (Niveau 2) : Accès à une synthèse du cours.
+*   **Pass Gold** (Niveau 3) : Accès à une synthèse du cours + des fiches de révision
+*   **Pass Bronze** (Niveau 1) : Accès à une synthèse du cours + des fiches de révision + des examens blancs + des corrections des examens blancs  
     *   *Note : Le Pass Gold est **Soulbound**, il est lié à votre portefeuille et ne peut jamais être transféré.*
 
 
