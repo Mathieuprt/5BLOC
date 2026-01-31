@@ -17,54 +17,51 @@ describe("SmartCourse", function () {
         return { smartCourse, owner, otherAccount, thirdAccount };
     }
 
-    describe("Deployment", function () {
-        it("Should set the right owner", async function () {
+    describe("Déploiement", function () {
+        it("Vérifie que le owner est bien défini", async function () {
             const { smartCourse, owner } = await loadFixture(deploySmartCourseFixture);
             expect(await smartCourse.owner()).to.equal(owner.address);
         });
     });
 
-    describe("Admin Minting", function () {
-        it("Should allow owner to mint tokens", async function () {
+    describe("Mint Admin", function () {
+        it("L'admin peut bien générer des jetons", async function () {
             const { smartCourse, owner, otherAccount } = await loadFixture(deploySmartCourseFixture);
-            // On mint 2 tokens Bronze pour un autre compte
             await smartCourse.adminMint(otherAccount.address, 1, 2);
             expect(await smartCourse.balanceOf(otherAccount.address, 1)).to.equal(2);
         });
 
-        it("Should fail if total tokens exceed limit of 8", async function () {
+        it("Bloque si on dépasse la limite de 8 par wallet", async function () {
             const { smartCourse, owner, otherAccount } = await loadFixture(deploySmartCourseFixture);
             await expect(smartCourse.adminMint(otherAccount.address, 1, 9)).to.be.revertedWith("Limite de 8 tokens atteinte");
         });
     });
 
     describe("Upgrades", function () {
-        it("Should upgrade 2 Bronze to 1 Silver", async function () {
+        it("Upgrade 2 Bronze -> 1 Silver", async function () {
             const { smartCourse, owner } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 2);
 
             // Les tokens sont lockés 1 min après réception
             await time.increase(601);
-
             await smartCourse.upgradeTokens(1);
 
             expect(await smartCourse.balanceOf(owner.address, 1)).to.equal(0);
             expect(await smartCourse.balanceOf(owner.address, 2)).to.equal(1);
         });
 
-        it("Should fail if not enough balance", async function () {
+        it("Erreur si pas assez de jetons pour upgrade", async function () {
             const { smartCourse, owner } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 1);
             await time.increase(601);
             await expect(smartCourse.upgradeTokens(1)).to.be.revertedWith("Solde insuffisant pour l'upgrade");
         });
 
-        it("Should fail if called before cooldown (1 min)", async function () {
+        it("Respect du cooldown (1 min) entre deux upgrades", async function () {
             const { smartCourse, owner } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 4);
             await time.increase(65);
 
-            // Premier upgrade OK
             await smartCourse.upgradeTokens(1);
 
             // On vérifie le cooldown contre le spam (1 min)
@@ -76,26 +73,25 @@ describe("SmartCourse", function () {
         });
     });
 
-    describe("Transfers & Restrictions", function () {
-        it("Should allow transfer of Bronze tokens after lock time", async function () {
+    describe("Transferts et Restrictions", function () {
+        it("Transfert OK après le délai de lock", async function () {
             const { smartCourse, owner, otherAccount } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 1);
 
             // Attente de la fin du verrouillage après réception
             await time.increase(65);
-
             await smartCourse.safeTransferFrom(owner.address, otherAccount.address, 1, 1, "0x");
             expect(await smartCourse.balanceOf(otherAccount.address, 1)).to.equal(1);
         });
 
-        it("Should prevent transfer of Bronze tokens before lock time", async function () {
+        it("Bloque le transfert pendant le lock (1 min)", async function () {
             const { smartCourse, owner, otherAccount } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 1);
 
             await expect(smartCourse.safeTransferFrom(owner.address, otherAccount.address, 1, 1, "0x")).to.be.revertedWith("Token verrouille pendant 1 minute apres reception");
         });
 
-        it("Should prevent transfer of Gold tokens (Soulbound)", async function () {
+        it("Le Gold est bien intransférable (Soulbound)", async function () {
             const { smartCourse, owner, otherAccount } = await loadFixture(deploySmartCourseFixture);
 
             await smartCourse.adminMint(owner.address, 1, 4);
@@ -107,11 +103,10 @@ describe("SmartCourse", function () {
             await smartCourse.upgradeTokens(2);
             await time.increase(65);
 
-            // Le Gold ne doit jamais bouger (Soulbound)
             await expect(smartCourse.safeTransferFrom(owner.address, otherAccount.address, 3, 1, "0x")).to.be.revertedWith("Le token Gold est non-transferable (Soulbound)");
         });
 
-        it("Should verify recipient limit on transfer", async function () {
+        it("Vérifie la limite de 8 jetons chez le destinataire", async function () {
             const { smartCourse, owner, otherAccount } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 5);
             await smartCourse.adminMint(otherAccount.address, 1, 4);
@@ -121,31 +116,26 @@ describe("SmartCourse", function () {
         });
     });
 
-    describe("Consuming Tokens", function () {
-        it("Should allow users to burn their own tokens", async function () {
+    describe("Consommation (Burn)", function () {
+        it("L'user peut burn ses propres pass", async function () {
             const { smartCourse, owner } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 2);
-
-            // Consommer un pass = burn du token
             await smartCourse.burnPass(1, 1);
-
             expect(await smartCourse.balanceOf(owner.address, 1)).to.equal(1);
         });
 
-        it("Should fail to burn if balance is insufficient", async function () {
+        it("Erreur si solde insuffisant pour burn", async function () {
             const { smartCourse, owner } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 1);
-
             await expect(smartCourse.burnPass(1, 2)).to.be.revertedWith("Solde insuffisant pour consommer ce Pass");
         });
 
-        it("Should fail if called before cooldown (1 min)", async function () {
+        it("Respect du cooldown pour le burn", async function () {
             const { smartCourse, owner } = await loadFixture(deploySmartCourseFixture);
             await smartCourse.adminMint(owner.address, 1, 2);
             await time.increase(601);
 
             await smartCourse.burnPass(1, 1);
-
             await expect(smartCourse.burnPass(1, 1)).to.be.revertedWith("Veuillez attendre 1 minute entre les transactions");
         });
     });
