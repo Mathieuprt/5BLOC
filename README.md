@@ -1,30 +1,26 @@
-# Guide d'Utilisation - DApp SmartCourse
+# SmartCourse
 
 ## 1. Comprendre les Pass (Tokens)
 
-Votre progression est matérialisée par des badges numériques (NFT) de trois niveaux différents. Chaque niveau offre des droits d'accès spécifiques :
+Trois niveaux de Pass. Chaque niveau offre des droits d'accès spécifiques :
 
 *   **Pass Silver** (Niveau 2) : Accès à une synthèse du cours.
 *   **Pass Gold** (Niveau 3) : Accès à une synthèse du cours + des fiches de révision
 *   **Pass Bronze** (Niveau 1) : Accès à une synthèse du cours + des fiches de révision + des examens blancs + des corrections des examens blancs  
-    *   *Note : Le Pass Gold est **Soulbound**, il est lié à votre portefeuille et ne peut jamais être transféré.*
 
+## 2. Fonctionnalités
 
-## 2. Actions Disponibles
-
-### A. Obtenir des pass (Mint) (Simulation)
-Pour tester l'application, vous pouvez générer vos propres badges dans la section **Admin Zone** (simulation d'un gain après une validation pédagogique).
+### A. Obtenir des pass (Mint)
+Pour générer un Pass Bronze, il faut se rendre dans la section **Admin Zone**
 - Choisissez le **niveau** du badge (Bronze uniquement).
 - Indiquez la **quantité** souhaitée.
 - Cliquez sur **Mint** et validez dans Metamask.
 *Note : Seul le niveau Bronze peut être généré directement par l'administrateur. Les niveaux supérieur (Argent et Or) s'obtiennent via l'Upgrade.*
-*Note : Vous devez posséder quelques ETH fictifs sur votre réseau local pour payer les frais du réseau.*
 
-### B. Améliorer mes pass (Upgrade)
+### B. Combinaison de Pass (Upgrade)
 Vous pouvez fusionner vos compétences pour atteindre le niveau supérieur :
 - fusion de **2 Pass Bronze** ➜ **1 Pass Silver**
 - fusion de **2 Pass Silver** ➜ **1 Pass Gold**
-*L'action d'upgrade détruit les anciens badges pour créer le nouveau automatiquement.*
 
 ### C. Transférer à un ami (Transfert)
 Vous pouvez transférer vos jetons **Bronze** et **Argent** à un autre étudiant :
@@ -36,13 +32,12 @@ Vous pouvez transférer vos jetons **Bronze** et **Argent** à un autre étudian
     - Dans la section **Transfert** de l'application, collez l'adresse de votre ami.
     - Choisissez le **type** de badge (Bronze ou Argent) et la **quantité**.
     - Cliquez sur **Envoyer** et validez la transaction.
-*Rappel : Les badges **OR** sont "Soulbound" (liés à votre identité) et ne peuvent pas être envoyés.*
 
-### D. Accéder au cours (Burn)
+### D. Obtenir un cours (Burn)
 Pour avoir accès à un cours dans l'Espace Formation :
 - Cliquez sur **"Obtenir le cours"**.
 - Cela va "consommer" (brûler) **1 Pass** du niveau requis.
-- Une fois consommé, le Pass est définitivement supprimé de votre inventaire, vous libérant ainsi de la place.
+- Une fois consommé, le Pass est définitivement supprimé de votre inventaire?
 
 
 ## 3. Règles et Limitations
@@ -52,14 +47,12 @@ Pour garantir la sécurité et l'équilibre de la plateforme, certaines règles 
 1.  **Limite de Possession** : Un étudiant ne peut pas détenir plus de **8 jetons au total** dans son portefeuille (tous niveaux confondus).
 2.  **Délai entre actions (Cooldown)** : Après une action majeure (Upgrade, Transfert, Consommation), vous devez patienter **1 minute** avant d'effectuer la suivante.
 3.  **Gel à la réception (Lock)** : Tout jeton reçu (via Mint ou Transfert) est "bloqué" pendant **1 minute** avant de pouvoir être utilisé pour un upgrade ou renvoyé.
-*Note : L'action "Admin Zone" n'est pas soumise au délai d'attente. Vous pouvez générer plusieurs jetons successivement.*
+*Note : Dans un souci de développement et de démonstration, nous avons choisi d'utiliser un cooldown d'une minute afin de ne pas avoir à attendre trop longtemps.*
 
 ---
 
-
 # Guide d'Installation et de Lancement - DApp SmartCourse
 
-Bienvenue dans le guide technique de **SmartCourse**. Suivez ces étapes pour installer, configurer et lancer l'application sur votre environnement local (Windows ou Linux).
 
 ## 1. Pré-requis
 
@@ -72,7 +65,7 @@ Avant de commencer, assurez-vous d'avoir installé les outils suivants :
 ### Étape A : Préparation du projet
 Ouvrez un terminal à la racine du projet et installez les dépendances :
 ```bash
-# Windows et Linux
+
 npm install
 ```
 
@@ -86,7 +79,7 @@ Initialisez le simulateur de réseau Ethereum :
 npx hardhat node
 ```
 > [!TIP]
-> **Gardez ce terminal bien visible.** Dès qu'il est lancé, une liste de 20 comptes s'affiche. Notez la **Private Key** (Clé Privée) de l'Account #0, vous en aurez besoin pour Metamask à l'étape 3.
+> **Gardez ce terminal bien visible.** Dès qu'il est lancé, une liste de 20 comptes s'affiche. Notez la **Private Key** (Clé Privée) de l'Account #0, cela permettra de récupérer des ETH fictifs.
 
 #### Terminal 2 : Déploiement du Contrat
 Une fois que le Terminal 1 est prêt, déployez le Smart Contract :
@@ -99,7 +92,7 @@ npx hardhat run scripts/deploy.js --network localhost
 #### Terminal 3 : Serveur Web
 Lancez l'interface utilisateur pour y accéder via votre navigateur :
 ```bash
-# Option Node.js (Recommandée)
+# Option Node.js
 npx serve .
 
 # Alternative Python
@@ -120,27 +113,21 @@ Pour interagir avec le contrat local, vous devez connecter Metamask au réseau s
     - **Symbole** : `ETH`
 2.  **Importer votre compte de test** :
     - Cliquez sur votre profil (en haut à gauche) Ajouter un portefeuille > **Importer un compte**.
-    - Copiez-collez la **Private Key** récupérée dans votre **Terminal 1** (celui où tu as lancé npx hardhat node) (ex: Account #0).
+    - Copiez-collez la **Private Key** récupérée dans votre **Terminal 1**
 3.  **Connexion au site** :
     - Sur votre navigateur, allez sur `http://localhost:3000`.
     - Cliquez sur **"Connecter Wallet"** 
     - Sélectionnez le compte que vous venez d'importer
     - Assurez-vous que Metamask est bien positionné sur le réseau Hardhat Localhost pour que vos soldes s'affichent correctement.
-4.  **En cas de blocage** :
-    - Si une transaction semble "bloquée" ou échoue bizarrement : Paramètres > Avancé > **Effacer les données de l'onglet Activité** (cela réinitialise le compteur de transactions locales).
 
 ## 5. Configuration IPFS (Pinata)
 
-Ce projet ne se connecte pas "automatiquement" à votre compte Pinata. C'est un processus décentralisé où vous devez uploader les fichiers pour obtenir leur adresse unique (CID).
-
-Voici la marche à suivre étape par étape :
-
 ## Étape 1 : Préparer les Images
-1.  Placez vos images (ex: `bronze.png`, `silver.png`, `gold.png`) dans le dossier `assets/` que je viens de créer.
-2.  Allez sur [Pinata Cloud](https://app.pinata.cloud/).
+1.  Placez vos images (ex: `bronze.png`, `silver.png`, `gold.png`) dans le dossier `assets/`
+2.  Se rendre sur Pinata Cloud
 3.  Cliquez sur **Add Files** -> **Folder**.
 4.  Sélectionnez le dossier `assets`.
-5.  Une fois uploadé, copiez le **CID** (le hash qui commence par `Qm...`) de ce dossier.
+5.  Une fois uploadé, copiez le **CID** de ce dossier.
 
 ## Étape 2 : Mettre à jour les Images dans les JSON
 1.  Ouvrez `metadata/bronze.json`, `metadata/silver.json`, `metadata/gold.json`.
@@ -155,23 +142,18 @@ Voici la marche à suivre étape par étape :
 ## Étape 4 : Mettre à jour le Contenu dans les JSON
 1.  Ouvrez à nouveau les fichiers JSON dans `metadata/`.
 2.  Remplacez `QmPlaceHolderContentHash` par le CID du dossier content.
-    *   Exemple : `"hash": "ipfs://QmYourContentHash/cours_bronze.md"`
 
-## Étape 5 : Uploader les Métadonnées (Final)
+## Étape 5 : Uploader les Métadonnées
 1.  Maintenant que vos JSON sont à jour (avec les bons liens images et contenu), on les upload.
 2.  Sur Pinata, **Add Files** -> **Folder**.
 3.  Sélectionnez le dossier `metadata`.
 4.  Copiez le **CID Final** de ce dossier.
-    *   C'est LE hash le plus important.
 
-## Étape 6 : Connecter au Projet
+## Étape 6
 1.  Lancez votre DApp.
-2.  Connectez votre wallet Admin (celui qui a déployé).
-3.  Dans la section "Administration", champ "IPFS URI", collez l'adresse suivante (utilisez le **CID du dossier metadata** obtenu à l'étape précédente) :
-    `ipfs://LE_CID_FINAL/` 
-    *(N'oubliez pas le `/` à la fin !)*
+2.  Connectez votre wallet Admin (celui qui a déployé)
+3.  Dans la section "Administration", champ "IPFS URI", collez le CID copié avec le préfixe **ipfs://**
 4.  Cliquez sur **"Définir URI"** et validez la transaction dans Metamask.
-5.  Patientez quelques secondes le temps de la validation, puis rafraîchissez la page pour voir vos tokens s'afficher avec leurs images.
 
 ---
 
@@ -190,43 +172,30 @@ Le projet repose sur une architecture Web3 standard qui sépare la logique méti
 Plusieurs décisions techniques ont été prises pour répondre aux besoins de performance et de sécurité :
 
 *   **Ethereum & Solidity** : Nous avons choisi l'écosystème Ethereum pour sa maturité et la robustesse du langage Solidity.
-*   **Standard ERC-1155** : Contrairement au format ERC-721 (NFT classique), l'ERC-1155 permet de gérer plusieurs types de tokens (Bronze, Silver, Gold) dans un seul et même contrat. C'est beaucoup plus économe en "gas" lors des déploiements et des transferts multiples.
+*   **Standard ERC-1155** : Contrairement au format ERC-721 (NFT classique), l'ERC-1155 permet de gérer plusieurs types de tokens (Bronze, Silver, Gold) dans un seul et même contrat.
 *   **OpenZeppelin** : Utilisation des bibliothèques standards pour le contrôle d'accès (`Ownable`) et la sécurité (`ReentrancyGuard`).
 *   **Hardhat** : Choisi comme environnement de développement pour ses outils de test performants et sa facilité de déploiement.
 *   **Pinata (IPFS)** : Utilisé comme passerelle pour faciliter l'indexation et la persistance des fichiers sur IPFS.
-
-| Composant | Technologie |
-| :--- | :--- |
-| **Langage Contrat** | Solidity 0.8.28 |
-| **Bibliothèques Contrat** | OpenZeppelin (ERC1155, Ownable, ReentrancyGuard, ERC115Supply) |
-| **Framework de Dev** | Hardhat |
-| **Tests** | Mocha & Chai |
-| **Librairie Web3** | Ethers.js v6 |
-| **Hébergement Off-chain** | IPFS (Pinata Cloud) |
 
 
 ## 3. Respect des contraintes métiers
 
 Le contrat `SmartCourse.sol` implémente strictement les règles définies pour le projet :
 
-1.  **Tokenisation à niveaux** : Les ressources sont divisées en trois catégories (Bronze, Silver et Gold), chacune offrant des droits d'accès croissants.
+1.  **Tokenisation à niveaux** : Les ressources sont divisées en trois catégories (Bronze, Silver et Gold), chacune offrant des droits d'accès spécifiques.
 2.  **Mécanisme d'échange** : Un système d'upgrade permet aux utilisateurs de convertir 2 tokens d'un niveau inférieur contre 1 token du niveau supérieur. Cette action "brûle" les tokens sources pour créer le nouveau.
-3.  **Limite de possession** : Pour éviter l'accumulation, chaque adresse est limitée à un maximum de 8 tokens au total (configurable).
+3.  **Limite de possession** : Pour éviter l'accumulation, chaque adresse est limitée à un maximum de 8 tokens.
 4.  **Contraintes temporelles** : 
-    *   **Cooldown** : Un délai de 1 minute est imposé entre deux actions majeures (transfert, upgrade ou consommation).
-    *   **Lock** : Chaque token reçu est verrouillé pendant 1 minute avant de pouvoir être transféré ou transformé.
-5.  **Transférabilité** : Les tokens Bronze et Silver sont échangeables. Cependant, le token Gold est "Soulbound", il n'est pas transférable une fois acquis.
+    *   Cooldown de 1mn (pour le développement, les tests et la démonstration)
+5.  **Transférabilité** : Les tokens Bronze et Silver sont échangeables contrairement au token Gold.
 
 ## 4. Sécurité et robustesse
 
 *   **Contrôles d'accès** : Seul l'administrateur (propriétaire du contrat) peut créer (mint) de nouveaux tokens initiaux.
-*   **Prévention des attaques** : L'utilisation de `nonReentrant` sur les fonctions critiques empêche les attaques par réentrance.
 *   **Validation des entrées** : Chaque fonction vérifie systématiquement les soldes des utilisateurs et le respect des délais avant d'exécuter une modification d'état.
 *   **Standardisation** : Le respect strict des interfaces ERC-1155 garantit la compatibilité avec les portefeuilles (Metamask) et les plateformes externes.
 
 ## 5. Tests unitaires
-
-La robustesse du projet est garantie par une suite de **13 tests automatisés** exécutés via Hardhat et Chai. Ces tests simulent des conditions d'utilisation réelles et tentent de forcer les failles de sécurité.
 
 ### Liste détaillée des tests effectués :
 
