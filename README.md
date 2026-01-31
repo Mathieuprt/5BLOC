@@ -166,7 +166,7 @@ Voici la marche à suivre étape par étape :
 ## Étape 6 : Connecter au Projet
 1.  Lancez votre DApp.
 2.  Connectez votre wallet Admin (celui qui a déployé).
-3.  Dans la section "Administration", champ "IPFS URI", collez l'adresse suivante :
+3.  Dans la section "Administration", champ "IPFS URI", collez l'adresse suivante (utilisez le **CID du dossier metadata** obtenu à l'étape précédente) :
     `ipfs://LE_CID_FINAL/` 
     *(N'oubliez pas le `/` à la fin !)*
 4.  Cliquez sur **"Définir URI"** et validez la transaction dans Metamask.
