@@ -97,7 +97,14 @@ describe("SmartCourse", function () {
 
         it("Should prevent transfer of Gold tokens (Soulbound)", async function () {
             const { smartCourse, owner, otherAccount } = await loadFixture(deploySmartCourseFixture);
-            await smartCourse.adminMint(owner.address, 3, 1);
+
+            await smartCourse.adminMint(owner.address, 1, 4);
+            await time.increase(601);
+            await smartCourse.upgradeTokens(1);
+            await time.increase(65);
+            await smartCourse.upgradeTokens(1);
+            await time.increase(65);
+            await smartCourse.upgradeTokens(2);
             await time.increase(65);
 
             // Le Gold ne doit jamais bouger (Soulbound)

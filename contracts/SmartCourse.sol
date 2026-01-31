@@ -26,7 +26,7 @@ contract SmartCourse is ERC1155, Ownable, ReentrancyGuard, ERC1155Supply {
 
     // Mint initial ou test (avec limite de 8 tokens/wallet)
     function adminMint(address account, uint256 id, uint256 amount) public onlyOwner {
-        require(id >= BRONZE && id <= GOLD, "ID de token invalide");
+        require(id == BRONZE, "Seul le jeton Bronze peut etre genere directement");
         require(balanceOf(account, BRONZE) + balanceOf(account, SILVER) + balanceOf(account, GOLD) + amount <= MAX_TOKENS_PER_WALLET, "Limite de 8 tokens atteinte");
         
         _mint(account, id, amount, "");

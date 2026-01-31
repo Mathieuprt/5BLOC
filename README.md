@@ -14,9 +14,10 @@ Votre progression est matérialisée par des badges numériques (NFT) de trois n
 
 ### A. Obtenir des pass (Mint) (Simulation)
 Pour tester l'application, vous pouvez générer vos propres badges dans la section **Admin Zone** (simulation d'un gain après une validation pédagogique).
-- Choisissez le **niveau** du badge (Bronze, Argent ou Or).
+- Choisissez le **niveau** du badge (Bronze uniquement).
 - Indiquez la **quantité** souhaitée.
 - Cliquez sur **Mint** et validez dans Metamask.
+*Note : Seul le niveau Bronze peut être généré directement par l'administrateur. Les niveaux supérieur (Argent et Or) s'obtiennent via l'Upgrade.*
 *Note : Vous devez posséder quelques ETH fictifs sur votre réseau local pour payer les frais du réseau.*
 
 ### B. Améliorer mes pass (Upgrade)
